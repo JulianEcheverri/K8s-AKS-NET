@@ -1,0 +1,41 @@
+version: '3.4'
+
+services:
+  shopping.api:
+    container_name: shoppingapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - DatabaseSettings:ConnectionString=mongodb://shoppingdb:27017/
+    depends_on:
+      - shopping.db
+    ports:
+      - "5241:80"
+      - "7145:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  shopping.client:
+    container_name: shoppingclient
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ShoppingAPIClientURL=https://shoppingapi
+    depends_on:
+      - shopping.db
+      - shopping.api
+    ports:
+      - "5042:80"
+      - "7217:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  shopping.db:
+    container_name: shoppingdb
+    restart: always
+    ports:
+    - "27018:27017"
+    volumes:
+    - './data:/data/db'
