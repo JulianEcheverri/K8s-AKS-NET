@@ -1,0 +1,16 @@
+For freating azure container registry 
+
+az acr create --resource-group shoppingapp-learning --name shoppinglearningacr --sku Basic
+az acr update -n shoppinglearningacr --admin-enabled true
+az acr login --name shoppinglearningacr 
+az acr list --resource-group shoppingapp-learning --query "[].{acrLoginServer:loginServer}" --output table
+
+shoppinglearningacr.azurecr.io
+
+docker tag shoppingapi:latest shoppinglearningacr.azurecr.io/shoppingapi:v1
+docker tag shoppingclient:latest shoppinglearningacr.azurecr.io/shoppingclient:v1
+
+docker push shoppinglearningacr.azurecr.io/shoppingapi:v1
+docker push shoppinglearningacr.azurecr.io/shoppingclient:v1
+
+az acr repository list --name shoppinglearningacr --output table
