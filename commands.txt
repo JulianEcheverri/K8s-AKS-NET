@@ -164,3 +164,8 @@ docker push shoppinglearningacr.azurecr.io/shoppingapi:v2
 docker push shoppinglearningacr.azurecr.io/shoppingclient:v2
 
 az acr repository show-tags --name shoppinglearningacr --repository shoppingclient --output table
+
+
+for checking interactive
+kubectl exec -it deployment.apps/shoppingclient-deployment -- sh
+then printenv
