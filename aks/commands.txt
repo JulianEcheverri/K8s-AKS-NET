@@ -1,3 +1,85 @@
+
+kubectl
+	see organized commands
+
+kubectl --help
+kubectl version
+kubectl cluster-info
+kubectl get nodes 
+kubectl get pod
+kubectl get services
+kubectl get all
+kubectl get all -- pods, services, deployments..
+
+-----------
+Impritive - Declarative
+Impritive Commands
+
+kubectl run [container_name] --image=[image_name]
+kubectl port-forward [pod] [ports]
+
+kubectl create [resource]
+kubectl apply [resource] -- create or modify resources
+
+-----------
+kubectl run swn-nginx --image=nginx
+kubectl get pods
+kubectl get all
+
+kubectl port-forward swn-nginx 8080:80
+kubectl delete deployment swn-nginx
+kubectl get pods --watch
+---------
+
+kubectl create
+	-- there is no pod 
+	so its abraction from deployment so we should create deployment
+
+kubectl create deployment name --image=image [--dry-run] [options]
+kubectl create deployment nginx-depl --image=nginx
+kubectl get deployment
+kubectl get pod
+kubectl get replicaset
+kubectl get all
+---------
+Debugging Pods
+
+kubectl logs nginx-depl-5c8bf76b5b-tzv2k
+
+-- create new depl - mongo
+kubectl create deployment mongo-depl --image=mongo
+kubectl get pod
+kubectl describe pod mongo-depl-5fd6b7d4b4-6xzjd
+kubectl logs mongo-depl-5fd6b7d4b4-6xzjd
+kubectl exec mongo-depl-5fd6b7d4b4-6xzjd -it sh
+	ls
+	mongo
+		show dbs
+
+-- delete reasource
+
+kubectl get deployment
+kubectl get replicaset
+
+kubectl delete deployment nginx-depl
+kubectl delete deployment mongo-depl
+
+kubectl get pod --watch
+kubectl get replicaset
+---------
+
+
+
+checking pods
+kubectl get pods shoppingclient-deployment-78595c59ff-ch5s5 -o wide
+
+
+
+
+
+
+
+
 For freating azure container registry 
 
 az acr create --resource-group shoppingapp-learning --name shoppinglearningacr --sku Basic
@@ -14,3 +96,65 @@ docker push shoppinglearningacr.azurecr.io/shoppingapi:v1
 docker push shoppinglearningacr.azurecr.io/shoppingclient:v1
 
 az acr repository list --name shoppinglearningacr --output table
+
+For creating aks
+az aks create --resource-group shoppingapp-learning --name shoppinglearningAKS --node-count 1 --generate-ssh-keys --attach-acr shoppinglearningacr
+
+az aks install-cli
+
+-- merge contexts
+az aks get-credentials --resource-group shoppingapp-learning --name shoppinglearningAKS
+
+kubectl config get-contexts
+
+
+az acr repository list --name shoppinglearningacr --output table
+
+
+
+
+
+
+
+Create Secret for pulling image from ACR to AKS
+
+shoppinglearningacr.azurecr.io
+
+Use password from Access Keys in ACR
+
+ZGd9tqzBGHkLN8NWa8I+oBB5KU0rOXgzX1YqFq+D8J+ACRA1KLf2
+
+kubectl create secret docker-registry acr-secret --docker-server=shoppinglearningacr.azurecr.io --docker-username=shoppinglearningacr --docker-password=ZGd9tqzBGHkLN8NWa8I+oBB5KU0rOXgzX1YqFq+D8J+ACRA1KLf2 --docker-email=julian.echeverri@gravity9.com
+
+
+Update YML files in order to deploy to AKS
+
+
+
+
+Run k8s Manifest YML to deploy in AKS
+kubectl apply -f .\aks\
+
+kubectl delete -f .\aks\
+
+
+
+fos scaling deployments/pods
+kubectl scale --replicas=3 deployment.apps/shoppingclient-deployment
+
+for get auto scaling 
+kubectl get hpa
+
+
+Set Zero downtime deployment
+
+docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
+docker-compose -f docker-compose.yml -f docker-compose.override.yml down
+
+docker tag shoppingapi:latest shoppinglearningacr.azurecr.io/shoppingapi:v2
+docker tag shoppingclient:latest shoppinglearningacr.azurecr.io/shoppingclient:v2
+
+docker push shoppinglearningacr.azurecr.io/shoppingapi:v2
+docker push shoppinglearningacr.azurecr.io/shoppingclient:v2
+
+az acr repository show-tags --name shoppinglearningacr --repository shoppingclient --output table
