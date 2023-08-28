@@ -19,7 +19,7 @@ variables:
   # Agent VM image name / set my personal agent
   # vmImageName: 'Default'
   pool:
-    name: 'Default'
+   name: 'Default'
 
 stages:
 - stage: Build
