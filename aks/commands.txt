@@ -82,6 +82,8 @@ kubectl get pods shoppingclient-deployment-78595c59ff-ch5s5 -o wide
 
 For freating azure container registry 
 
+az login --user <myAlias@myCompany.com> -password <myPassword>
+
 az acr create --resource-group shoppingapp-learning --name shoppinglearningacr --sku Basic
 az acr update -n shoppinglearningacr --admin-enabled true
 az acr login --name shoppinglearningacr 
@@ -122,9 +124,13 @@ shoppinglearningacr.azurecr.io
 
 Use password from Access Keys in ACR
 
-ZGd9tqzBGHkLN8NWa8I+oBB5KU0rOXgzX1YqFq+D8J+ACRA1KLf2
+9yNROmtIcWYii2eJZIMHuU6vG3WMnuGoxsGPB1gzZF+ACRC0/Yj2
 
-kubectl create secret docker-registry acr-secret --docker-server=shoppinglearningacr.azurecr.io --docker-username=shoppinglearningacr --docker-password=ZGd9tqzBGHkLN8NWa8I+oBB5KU0rOXgzX1YqFq+D8J+ACRA1KLf2 --docker-email=julian.echeverri@gravity9.com
+kubectl create secret docker-registry acr-secret --docker-server=shoppinglearningacr.azurecr.io --docker-username=shoppinglearningacr --docker-password=9yNROmtIcWYii2eJZIMHuU6vG3WMnuGoxsGPB1gzZF+ACRC0/Yj2 --docker-email=julianecheverri@outlook.com
+
+
+
+
 
 
 Update YML files in order to deploy to AKS
